@@ -1,6 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
-import { AppService } from './app.service';
-import { Product } from './schemas/product.schema';
+import { Controller } from '@nestjs/common';
 
 @Controller()
 export class AppController {
