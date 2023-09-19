@@ -2,13 +2,15 @@ import { Model } from "mongoose";
 import { Inject, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { User, UserDocument } from "../schemas/user.schema";
+import { encodePassword } from "src/utils/bcrypt";
 
 @Injectable()
 export class UserService {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { }
 
     async create(user: User): Promise<User> {
-        const createdUser = new this.userModel(user);
+        const password = await encodePassword(user.password);
+        const createdUser = new this.userModel({ ...user, password });
         return createdUser.save();
     }
 
