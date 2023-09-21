@@ -19,6 +19,9 @@ export class Product {
 
     @Prop({ type: Date, default: Date.now })
     date_of_expiry: Date;
+
+    @Prop()
+    img: string;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
