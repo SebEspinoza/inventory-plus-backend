@@ -11,7 +11,7 @@ export class Report {
     date: Date;
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-    user: User[];
+    user: User;
 }
 
 export const ReportSchema = SchemaFactory.createForClass(Report);
