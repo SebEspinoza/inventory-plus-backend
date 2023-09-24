@@ -29,4 +29,8 @@ export class UserService {
     async remove(id: string): Promise<User> {
         return this.userModel.findByIdAndRemove(id);
     }
+
+    async findOneByEmail(email: string): Promise<User | undefined> {
+        return this.userModel.findOne({ email });
+    }
 }

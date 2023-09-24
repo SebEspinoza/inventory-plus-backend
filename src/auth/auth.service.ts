@@ -12,12 +12,20 @@ export class AuthService {
     ) { }
 
     async validateUser(email: string, password: string): Promise<any> {
-        const user = await this.userService.findOne(email);
-        if (user && await bcrypt.compare(password, user.password)) {
+        const user = await this.userService.findOneByEmail(email);
+        const checkpassword = await bcrypt.compare(password, user.password);
+        if (user && checkpassword) {
             const { password, ...result } = user;
-            return result;
+            const payload = { email: user.email };
+            return {
+                success: true,
+                data: this.jwtService.sign(payload),
+            }
         }
-        return null;
+        return {
+            success: false,
+            data: "Invalid email or password",
+        };
     }
 
     async login(user: User) {
