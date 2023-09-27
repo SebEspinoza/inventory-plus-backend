@@ -19,6 +19,7 @@ export class AuthService {
             const payload = { email: user.email };
             return {
                 success: true,
+                type: user.role,
                 data: this.jwtService.sign(payload),
             }
         }
