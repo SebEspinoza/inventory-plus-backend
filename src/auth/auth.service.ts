@@ -20,7 +20,8 @@ export class AuthService {
             return {
                 success: true,
                 type: user.role,
-                data: this.jwtService.sign(payload),
+                data: user.username,
+                token: this.jwtService.sign(payload),
             }
         }
         return {
