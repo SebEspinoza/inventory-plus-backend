@@ -23,18 +23,12 @@ export class AuthService {
                 data: user.username,
                 token: this.jwtService.sign(payload),
             }
-        }
-        return {
-            success: false,
-            data: "Invalid email or password",
-        };
+        } else
+            return {
+                success: false,
+                data: "Invalid email or password",
+            };
     }
 
-    async login(user: User) {
-        const payload = { email: user.email };
-        return {
-            access_token: this.jwtService.sign(payload)
-        }
-    }
 
 }
