@@ -9,10 +9,10 @@ export type LogProductDocument = LogProduct & Document;
 @Schema()
 export class LogProduct {
     @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Product' }] })
-    products: Product[]; // Un array de productos que se registraron en este log
+    products: Product[];
 
     @Prop({ type: Date, default: Date.now })
-    date_of_expiry: Date;
+    timestamp: Date;
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
     user: User;
