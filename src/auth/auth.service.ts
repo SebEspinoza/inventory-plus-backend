@@ -23,12 +23,11 @@ export class AuthService {
                 data: user.username,
                 token: this.jwtService.sign(payload),
             }
-        } else
+        } if (!user) {
             return {
                 success: false,
                 data: "Invalid email or password",
             };
+        }
     }
-
-
 }

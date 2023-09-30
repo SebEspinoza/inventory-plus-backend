@@ -10,7 +10,7 @@ import { LogProductModule } from './logProducts/logProduct.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), MongooseModule.forRoot(process.env.MONGO_URI), AuthModule, ProductModule, UserModule, ReportModule, LogProductModule],
+  imports: [ConfigModule.forRoot(), MongooseModule.forRoot(process.env.MONGO_URI), AuthModule, ProductModule, UserModule, LogProductModule],
   controllers: [AppController],
   providers: [AppService],
 })
