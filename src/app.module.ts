@@ -5,12 +5,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './users/user.module';
 import { ProductModule } from './products/product.module';
-import { ReportModule } from './reports/report.module';
 import { LogProductModule } from './logProducts/logProduct.module';
 import { AuthModule } from './auth/auth.module';
+require('dotenv').config();
 
 @Module({
-  imports: [ConfigModule.forRoot(), MongooseModule.forRoot(process.env.MONGO_URI), AuthModule, ProductModule, UserModule, LogProductModule],
+  imports: [ConfigModule.forRoot(), MongooseModule.forRoot(process.env.MONGO_URI), ProductModule, UserModule, LogProductModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

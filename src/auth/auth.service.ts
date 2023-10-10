@@ -1,33 +1,53 @@
-import { Injectable } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { UserService } from "src/users/user.service";
-import * as bcrypt from "bcrypt";
-import { User } from "src/schemas/user.schema"
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User } from 'src/schemas/user.schema';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { SignUpDto } from './dto/signup.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
     constructor(
-        private userService: UserService,
+        @InjectModel(User.name)
+        private userModel: Model<User>,
         private jwtService: JwtService
     ) { }
 
-    async validateUser(email: string, password: string): Promise<any> {
-        const user = await this.userService.findOneByEmail(email);
-        const checkpassword = await bcrypt.compare(password, user.password);
-        if (user && checkpassword) {
-            const { password, ...result } = user;
-            const payload = { email: user.email };
-            return {
-                success: true,
-                type: user.role,
-                data: user.username,
-                token: this.jwtService.sign(payload),
-            }
-        } if (!user) {
-            return {
-                success: false,
-                data: "Invalid email or password",
-            };
-        }
+    async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
+        const { username, password, email, first_name, last_name, role } = signUpDto;
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const user = await this.userModel.create({
+            username,
+            password: hashedPassword,
+            email,
+            first_name,
+            last_name,
+            role
+        });
+
+        const token = this.jwtService.sign({ id: user._id });
+
+        return { token }
     }
+
+    async login(loginDto: LoginDto): Promise<{ token: string, success: boolean, type: Boolean, data: string }> {
+        const { email, password } = loginDto;
+
+        const user = await this.userModel.findOne({ email });
+        if (!user) {
+            throw new UnauthorizedException('Correo o Contraseña Incorrecta');
+        }
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        if (!isPasswordMatch) {
+            throw new UnauthorizedException('Correo o Contraseña Incorrecta');
+        }
+
+        const token = this.jwtService.sign({ id: user._id });
+        return { token: token, success: true, type: user.role, data: user.username }
+
+    }
+
 }
