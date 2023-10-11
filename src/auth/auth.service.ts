@@ -15,7 +15,7 @@ export class AuthService {
         private jwtService: JwtService
     ) { }
 
-    async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
+    async signUp(signUpDto: SignUpDto): Promise<{ success: boolean }> {
         const { username, password, email, first_name, last_name, role } = signUpDto;
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -30,7 +30,7 @@ export class AuthService {
 
         const token = this.jwtService.sign({ id: user._id });
 
-        return { token }
+        return { success: true }
     }
 
     async login(loginDto: LoginDto): Promise<{ token: string, success: boolean, type: Boolean, data: string }> {
