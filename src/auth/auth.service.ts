@@ -15,7 +15,7 @@ export class AuthService {
         private jwtService: JwtService
     ) { }
 
-    async signUp(signUpDto: SignUpDto): Promise<{ success: boolean }> {
+    async signUp(signUpDto: SignUpDto): Promise<{ success: boolean, role: Boolean, token: string }> {
         const { username, password, email, first_name, last_name, role } = signUpDto;
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -28,9 +28,9 @@ export class AuthService {
             role
         });
 
-        const token = this.jwtService.sign({ id: user._id });
+        const token = this.jwtService.sign({ id: user._id, username: user.username });
 
-        return { success: true }
+        return { success: true, role: user.role, token: token }
     }
 
     async login(loginDto: LoginDto): Promise<{ token: string, success: boolean, type: Boolean, data: string }> {
@@ -45,7 +45,7 @@ export class AuthService {
             throw new UnauthorizedException('Correo o Contraseña Incorrecta');
         }
 
-        const token = this.jwtService.sign({ id: user._id });
+        const token = this.jwtService.sign({ id: user._id, username: user.username });
         return { token: token, success: true, type: user.role, data: user.username }
 
     }
