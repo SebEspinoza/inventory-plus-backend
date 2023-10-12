@@ -14,8 +14,8 @@ export class LogProduct {
     @Prop({ type: Date, default: Date.now })
     timestamp: Date;
 
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-    user: User;
+    // @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
+    // user: User;
 }
 
 export const LogProductSchema = SchemaFactory.createForClass(LogProduct);
