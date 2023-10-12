@@ -31,24 +31,24 @@ export class LogProductService {
         await logProduct.save();
     }
 
-    // async create(logProduct: LogProduct): Promise<LogProduct> {
-    //     const createdLogProduct = new this.logProductModel(logProduct);
-    //     return createdLogProduct.save();
-    // }
+    async create(logProduct: LogProduct): Promise<LogProduct> {
+        const createdLogProduct = new this.logProductModel(logProduct);
+        return createdLogProduct.save();
+    }
 
-    // async findAll(): Promise<LogProduct[]> {
-    //     return this.logProductModel.find().exec();
-    // }
+    async findAll(): Promise<LogProduct[]> {
+        return this.logProductModel.find().exec();
+    }
 
-    // async findOne(id: string): Promise<LogProduct> {
-    //     return this.logProductModel.findById(id);
-    // }
+    async findOne(id: string): Promise<LogProduct> {
+        return this.logProductModel.findById(id);
+    }
 
-    // async update(id: string, logProduct: LogProduct): Promise<LogProduct> {
-    //     return this.logProductModel.findByIdAndUpdate(id, logProduct, { new: true });
-    // }
+    async update(id: string, logProduct: LogProduct): Promise<LogProduct> {
+        return this.logProductModel.findByIdAndUpdate(id, logProduct, { new: true });
+    }
 
-    // async remove(id: string): Promise<LogProduct> {
-    //     return this.logProductModel.findByIdAndRemove(id);
-    // }
+    async remove(id: string): Promise<LogProduct> {
+        return this.logProductModel.findByIdAndRemove(id);
+    }
 }
