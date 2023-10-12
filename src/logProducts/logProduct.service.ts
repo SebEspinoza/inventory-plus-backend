@@ -3,15 +3,18 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Cron } from "@nestjs/schedule";
 import { LogProduct, LogProductDocument } from "../schemas/logProduct.schema";
+import { ProductService } from "src/products/product.service";
 
 @Injectable()
 export class LogProductService {
-    constructor(@InjectModel(LogProduct.name) private logProductModel: Model<LogProductDocument>) { }
+    constructor(@InjectModel(LogProduct.name) private logProductModel: Model<LogProductDocument>,
+        private productService: ProductService) { }
 
     @Cron('0 9 * * *') // 9:00AM
     async scheduleMorningLogProduct() {
+        const products = await this.productService.findAll();
         const logProduct = new this.logProductModel({
-            products: [],
+            products,
             timestamp: new Date()
         });
 
@@ -20,8 +23,9 @@ export class LogProductService {
 
     @Cron('20 20 * * *') // 8:30PM
     async scheduleEveneningLogProduct() {
+        const products = await this.productService.findAll();
         const logProduct = new this.logProductModel({
-            products: [],
+            products,
             timestamp: new Date()
         })
         await logProduct.save();
