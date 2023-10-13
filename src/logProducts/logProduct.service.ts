@@ -19,7 +19,7 @@ export class LogProductService {
         await this.createLogProduct(products);
     }
 
-    @Cron('01 16 * * *') // 8:30PM
+    @Cron('00 20 * * *') // 8:00PM
     async scheduleEveneningLogProduct() {
         const products = await this.productService.findAll();
         await this.createLogProduct(products);
