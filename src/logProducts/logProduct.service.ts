@@ -4,13 +4,14 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Cron } from "@nestjs/schedule";
 import { LogProduct, LogProductDocument } from "../schemas/logProduct.schema";
 import { ProductService } from "src/products/product.service";
-import { Product } from "src/schemas/product.schema";
-import { log } from "console";
+import { Product, ProductDocument } from "src/schemas/product.schema";
+
 
 @Injectable()
 export class LogProductService {
     constructor(@InjectModel(LogProduct.name) private logProductModel: Model<LogProductDocument>,
-        private productService: ProductService) { }
+        private productService: ProductService,
+    ) { }
 
     @Cron('0 9 * * *') // 9:00AM
     async scheduleMorningLogProduct() {
@@ -18,7 +19,7 @@ export class LogProductService {
         await this.createLogProduct(products);
     }
 
-    @Cron('00 20 * * *') // 8:30PM
+    @Cron('01 16 * * *') // 8:30PM
     async scheduleEveneningLogProduct() {
         const products = await this.productService.findAll();
         await this.createLogProduct(products);
@@ -29,8 +30,8 @@ export class LogProductService {
         const logProduct = new this.logProductModel({
             products,
             timestamp: new Date()
-        });
-        await logProduct.save();
+        }).populate('products');
+        return (await logProduct).save();
     }
 
     async create(logProduct: LogProduct): Promise<LogProduct> {
@@ -39,7 +40,7 @@ export class LogProductService {
     }
 
     async findAll(): Promise<LogProduct[]> {
-        return this.logProductModel.find().exec();
+        return this.logProductModel.find().populate('products');
     }
 
     async findOne(id: string): Promise<LogProduct> {
