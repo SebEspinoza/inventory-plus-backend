@@ -16,9 +16,8 @@ export class AuthController {
     @Post('/login')
     login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) response): Promise<{ token: string }> {
         response.cookie('jwt', this.authService.login(loginDto), {
-            httpOnly: true,
+            // httpOnly: true,
         })
-        console.log(response)
         return this.authService.login(loginDto);
     }
 }
