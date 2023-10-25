@@ -18,6 +18,7 @@ export class AuthController {
         response.cookie('jwt', this.authService.login(loginDto), {
             httpOnly: true,
         })
+        console.log(response)
         return this.authService.login(loginDto);
     }
 }
