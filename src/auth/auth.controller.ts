@@ -1,7 +1,8 @@
-import { Body, Controller, Post, Get } from '@nestjs/common';
+import { Body, Controller, Post, Get, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
+import { Response, response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -13,7 +14,10 @@ export class AuthController {
     }
 
     @Post('/login')
-    login(@Body() loginDto: LoginDto): Promise<{ token: string }> {
+    login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) response): Promise<{ token: string }> {
+        response.cookie('jwt', this.authService.login(loginDto), {
+            httpOnly: true,
+        })
         return this.authService.login(loginDto);
     }
 }

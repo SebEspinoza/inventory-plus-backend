@@ -14,7 +14,7 @@ require('dotenv').config();
             useFactory: () => ({
                 secret: process.env.JWT_SECRET,
                 signOptions: {
-                    expiresIn: '1d'
+                    expiresIn: '1d',
                 }
             })
         }),
