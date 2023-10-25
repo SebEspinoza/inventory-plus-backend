@@ -33,4 +33,9 @@ export class UserService {
     async findOneByEmail(email: string): Promise<User | undefined> {
         return this.userModel.findOne({ email });
     }
+
+    async setCurrentRefreshToken(refreshToken: string, userId: string) {
+        const currentHashedRefreshToken = await encodePassword(refreshToken);
+        return this.userModel.updateOne({ _id: userId }, { currentHashedRefreshToken });
+    }
 }

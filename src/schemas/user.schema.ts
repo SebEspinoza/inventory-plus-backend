@@ -22,6 +22,9 @@ export class User {
 
     @Prop({})
     role: Boolean;
+
+    @Prop({})
+    refreshToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

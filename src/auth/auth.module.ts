@@ -4,6 +4,8 @@ import { AuthService } from './auth.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { AccessTokenStrategy } from './accessToken.strategy';
+import { RefreshTokenStrategy } from './refreshToken.strategy';
 require('dotenv').config();
 
 
@@ -20,6 +22,6 @@ require('dotenv').config();
         }),
         MongooseModule.forFeature([{ name: 'User', schema: 'UserSchema' }])],
     controllers: [AuthController],
-    providers: [AuthService],
+    providers: [AuthService]
 })
 export class AuthModule { }

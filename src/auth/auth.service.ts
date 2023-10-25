@@ -3,10 +3,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/schemas/user.schema';
 import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
-import { Response } from 'express';
+
+
 
 
 @Injectable()
@@ -36,17 +37,20 @@ export class AuthService {
     }
 
     async login(loginDto: LoginDto): Promise<{ token: string, success: boolean, data: any }> {
-        const { email, password } = loginDto;
-        const user = await this.userModel.findOne({ email });
-        if (!user) {
+        try {
+            const { email, password } = loginDto;
+            const user = await this.userModel.findOne({ email });
+            if (!user) {
+                throw new UnauthorizedException('Correo o Contraseña Incorrecta');
+            }
+            const isPasswordMatch = await bcrypt.compare(password, user.password);
+            if (!isPasswordMatch) {
+                throw new UnauthorizedException('Correo o Contraseña Incorrecta');
+            }
+            const refresh_token = this.jwtService.sign({ id: user._id, username: user.username });
+            return { token: refresh_token, success: true, data: `Username:${user.username}, Role:${user.role}` }
+        } catch {
             throw new UnauthorizedException('Correo o Contraseña Incorrecta');
         }
-        const isPasswordMatch = await bcrypt.compare(password, user.password);
-        if (!isPasswordMatch) {
-            throw new UnauthorizedException('Correo o Contraseña Incorrecta');
-        }
-        const refresh_token = this.jwtService.sign({ id: user._id, username: user.username }, { expiresIn: '7d' });
-        return { token: refresh_token, success: true, data: `Username:${user.username}, Role:${user.role}` }
-
     }
-}
+}  
