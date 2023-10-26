@@ -36,7 +36,7 @@ export class AuthService {
         return { success: true, role: user.role, token: token }
     }
 
-    async login(loginDto: LoginDto): Promise<{ token: string, success: boolean, data: any }> {
+    async login(loginDto: LoginDto): Promise<{ token: string, success: boolean, type: Boolean, data: string }> {
         try {
             const { email, password } = loginDto;
             const user = await this.userModel.findOne({ email });
@@ -48,7 +48,7 @@ export class AuthService {
                 throw new UnauthorizedException('Correo o Contraseña Incorrecta');
             }
             const refresh_token = this.jwtService.sign({ id: user._id, username: user.username });
-            return { token: refresh_token, success: true, data: `Username:${user.username}, Role:${user.role}` }
+            return { token: refresh_token, success: true, type: user.role, data: user.username };
         } catch {
             throw new UnauthorizedException('Correo o Contraseña Incorrecta');
         }
