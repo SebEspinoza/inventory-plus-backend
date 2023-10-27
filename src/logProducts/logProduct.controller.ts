@@ -7,8 +7,13 @@ export class LogProductController {
     constructor(private readonly logProductService: LogProductService) { }
 
     @Post()
-    async create(@Body() logProduct: LogProduct): Promise<LogProduct> {
-        return this.logProductService.create(logProduct);
+    async createMorning() {
+        return this.logProductService.scheduleMorningLogProduct();
+    }
+
+    @Post()
+    async createEvening() {
+        return this.logProductService.scheduleEveneningLogProduct();
     }
 
     @Get()
