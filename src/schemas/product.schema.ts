@@ -22,6 +22,9 @@ export class Product {
 
     @Prop()
     img: string;
+
+    @Prop({ type: Date, default: Date.now })
+    date_added: Date;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
