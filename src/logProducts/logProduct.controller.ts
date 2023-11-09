@@ -6,12 +6,12 @@ import { LogProduct } from "../schemas/logProduct.schema";
 export class LogProductController {
     constructor(private readonly logProductService: LogProductService) { }
 
-    @Post()
+    @Post('/morning')
     async createMorning() {
         return this.logProductService.scheduleMorningLogProduct();
     }
 
-    @Post()
+    @Post('/evening')
     async createEvening() {
         return this.logProductService.scheduleEveneningLogProduct();
     }
