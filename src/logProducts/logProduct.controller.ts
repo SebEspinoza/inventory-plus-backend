@@ -8,7 +8,7 @@ export class LogProductController {
 
     @Post('/morning')
     async createMorning() {
-        return this.logProductService.scheduleMorningLogProduct();
+        return this.logProductService.create();
     }
 
     @Get()

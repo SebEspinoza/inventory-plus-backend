@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, Delete } from "@nestjs/common";
 import { LogProductService } from "./logProductEvening.service";
-import { LogProductEvening } from "../schemas/logProductEvening.schema";
+import { LogProductEvening, LogProductEveningDocument } from "../schemas/logProductEvening.schema";
 
 @Controller("logProductsEvening")
 export class LogProductController {
@@ -8,7 +8,7 @@ export class LogProductController {
 
     @Post('/evening')
     async createEvening() {
-        return this.logProductService.scheduleEveningLogProduct();
+        return this.logProductService.create();
     }
 
     @Get()

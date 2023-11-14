@@ -17,23 +17,31 @@ export class LogProductService {
   @Cron('0 9 * * *', {
     timeZone: 'America/Santiago', // 9:00AM UTC-4
   })
-  async scheduleMorningLogProduct() {
-    const products = await this.productService.findAll();
-    await this.createLogProduct(products);
+  async create(): Promise<LogProductMorning> {
+    try {
+      const products = await this.productService.findAll();
+
+      // Extract only the relevant fields (name, quantity, price) from each product
+      const simplifiedProducts = products.map(product => ({
+        name: product.name,
+        quantity: product.quantity,
+        price: product.price,
+      }));
+
+      const logProduct = new this.logProductModel({
+        products: simplifiedProducts,
+        timestamp: new Date(),
+      });
+
+      const createdLogProduct = await logProduct.save();
+      console.log('Log product created:', createdLogProduct);
+      return createdLogProduct;
+    } catch (error) {
+      console.error('Error creating log product:', error);
+      throw error;
+    }
   }
 
-  private async createLogProduct(products: Product[]) {
-    const logProduct = new this.logProductModel({
-      products,
-      timestamp: new Date(),
-    });
-    return await this.create(logProduct);
-  }
-
-  async create(logProduct: LogProductMorning): Promise<LogProductMorning> {
-    const createdLogProduct = new this.logProductModel(logProduct);
-    return createdLogProduct.save();
-  }
 
   async findAll(): Promise<LogProductMorning[]> {
     return this.logProductModel

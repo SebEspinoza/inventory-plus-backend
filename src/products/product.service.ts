@@ -13,7 +13,7 @@ export class ProductService {
     }
 
     async findAll(): Promise<Product[]> {
-        return this.productModel.find().exec();
+        return this.productModel.find();
     }
 
     async findOne(id: string): Promise<Product> {
