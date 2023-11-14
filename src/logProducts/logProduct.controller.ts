@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Put, Param, Delete } from "@nestjs/common";
 import { LogProductService } from "./logProduct.service";
-import { LogProduct } from "../schemas/logProduct.schema";
+import { LogProductMorning } from "../schemas/logProductMorning.schema";
 
-@Controller("logProducts")
+@Controller("logProductsMorning")
 export class LogProductController {
     constructor(private readonly logProductService: LogProductService) { }
 
@@ -11,31 +11,26 @@ export class LogProductController {
         return this.logProductService.scheduleMorningLogProduct();
     }
 
-    @Post('/evening')
-    async createEvening() {
-        return this.logProductService.scheduleEveneningLogProduct();
-    }
-
     @Get()
-    async findAll(): Promise<LogProduct[]> {
+    async findAll(): Promise<LogProductMorning[]> {
         return this.logProductService.findAll();
     }
 
     @Get(":id")
-    async findOne(@Param("id") id: string): Promise<LogProduct> {
+    async findOne(@Param("id") id: string): Promise<LogProductMorning> {
         return this.logProductService.findOne(id);
     }
 
     @Put(":id")
     async update(
         @Param("id") id: string,
-        @Body() logProduct: LogProduct,
-    ): Promise<LogProduct> {
+        @Body() logProduct: LogProductMorning,
+    ): Promise<LogProductMorning> {
         return this.logProductService.update(id, logProduct);
     }
 
     @Delete(":id")
-    async remove(@Param("id") id: string): Promise<LogProduct> {
+    async remove(@Param("id") id: string): Promise<LogProductMorning> {
         return this.logProductService.remove(id);
     }
 }

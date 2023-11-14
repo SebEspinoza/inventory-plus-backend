@@ -2,17 +2,17 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Cron } from '@nestjs/schedule';
-import { LogProduct, LogProductDocument } from '../schemas/logProduct.schema';
+import { LogProductMorning, LogProductMorningDocument } from '../schemas/logProductMorning.schema';
 import { ProductService } from 'src/products/product.service';
 import { Product, ProductDocument } from 'src/schemas/product.schema';
 
 @Injectable()
 export class LogProductService {
   constructor(
-    @InjectModel(LogProduct.name)
-    private logProductModel: Model<LogProductDocument>,
+    @InjectModel(LogProductMorning.name)
+    private logProductModel: Model<LogProductMorningDocument>,
     private productService: ProductService,
-  ) {}
+  ) { }
 
   @Cron('0 9 * * *', {
     timeZone: 'America/Santiago', // 9:00AM UTC-4
@@ -22,28 +22,20 @@ export class LogProductService {
     await this.createLogProduct(products);
   }
 
-  @Cron('0 20 * * *', {
-    timeZone: 'America/Santiago', // 8:00PM UTC-4
-  })
-  async scheduleEveneningLogProduct() {
-    const products = await this.productService.findAll();
-    await this.createLogProduct(products);
-  }
-
   private async createLogProduct(products: Product[]) {
     const logProduct = new this.logProductModel({
       products,
       timestamp: new Date(),
     });
-    return await logProduct.save();
+    return await this.create(logProduct);
   }
 
-  async create(logProduct: LogProduct): Promise<LogProduct> {
+  async create(logProduct: LogProductMorning): Promise<LogProductMorning> {
     const createdLogProduct = new this.logProductModel(logProduct);
     return createdLogProduct.save();
   }
 
-  async findAll(): Promise<LogProduct[]> {
+  async findAll(): Promise<LogProductMorning[]> {
     return this.logProductModel
       .find()
       .populate({
@@ -53,7 +45,7 @@ export class LogProductService {
       .exec();
   }
 
-  async findOne(id: string): Promise<LogProduct> {
+  async findOne(id: string): Promise<LogProductMorning> {
     return this.logProductModel
       .findById(id)
       .populate({
@@ -63,13 +55,13 @@ export class LogProductService {
       .exec();
   }
 
-  async update(id: string, logProduct: LogProduct): Promise<LogProduct> {
+  async update(id: string, logProduct: LogProductMorning): Promise<LogProductMorning> {
     return this.logProductModel.findByIdAndUpdate(id, logProduct, {
       new: true,
     });
   }
 
-  async remove(id: string): Promise<LogProduct> {
+  async remove(id: string): Promise<LogProductMorning> {
     return this.logProductModel.findByIdAndRemove(id);
   }
 }
