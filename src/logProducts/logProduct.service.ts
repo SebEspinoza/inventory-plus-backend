@@ -21,7 +21,6 @@ export class LogProductService {
     try {
       const products = await this.productService.findAll();
 
-      // Extract only the relevant fields (name, quantity, price) from each product
       const simplifiedProducts = products.map(product => ({
         name: product.name,
         quantity: product.quantity,
