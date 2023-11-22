@@ -8,8 +8,17 @@ export class Product {
     @Prop({ required: true })
     name: string;
 
-    @Prop({ required: true })
-    category: string;
+    @Prop({
+        type: [
+            {
+                category: { type: String, required: true },
+            }
+        ],
+        default: [],
+    })
+    category: {
+        category: string;
+    }[];
 
     @Prop({ required: true })
     price: number;

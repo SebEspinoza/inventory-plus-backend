@@ -10,11 +10,13 @@ import { AuthModule } from './auth/auth.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { LogProductEveningModule } from './logProductsEvening/logProductEvening.module';
 import { RoleModule } from './role/role.module';
+import { CategoryController } from './category/category.controller';
+import { CategoryModule } from './category/category.module';
 require('dotenv').config();
 
 @Module({
-  imports: [ConfigModule.forRoot(), MongooseModule.forRoot(process.env.MONGO_URI), ProductModule, UserModule, LogProductMorningModule, LogProductEveningModule, AuthModule, ScheduleModule.forRoot(), RoleModule],
-  controllers: [AppController],
+  imports: [ConfigModule.forRoot(), MongooseModule.forRoot(process.env.MONGO_URI), ProductModule, UserModule, LogProductMorningModule, LogProductEveningModule, AuthModule, ScheduleModule.forRoot(), RoleModule, CategoryModule],
+  controllers: [AppController, CategoryController],
   providers: [AppService],
 })
 export class AppModule { }

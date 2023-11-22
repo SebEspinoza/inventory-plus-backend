@@ -20,7 +20,7 @@ require('dotenv').config();
                 }
             })
         }),
-        MongooseModule.forFeature([{ name: 'User', schema: 'UserSchema' }])],
+        MongooseModule.forFeature([{ name: 'User', schema: 'UserSchema' }]), MongooseModule.forFeature([{ name: 'Role', schema: 'RoleSchema' }])],
     controllers: [AuthController],
     providers: [AuthService]
 })
