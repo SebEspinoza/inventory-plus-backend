@@ -20,17 +20,8 @@ export class User {
     @Prop({})
     last_name: string;
 
-    @Prop({
-        type: [
-            {
-                role: { type: Boolean, required: true },
-            },
-        ],
-        default: [],
-    })
-    role: {
-        role: string;
-    }[];
+    @Prop({})
+    role: Boolean;
 
     @Prop({})
     refreshToken: string;

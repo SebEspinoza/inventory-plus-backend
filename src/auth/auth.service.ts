@@ -6,7 +6,6 @@ import * as bcrypt from 'bcrypt';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
-import { Role } from 'src/schemas/role.schema';
 
 
 
@@ -19,7 +18,7 @@ export class AuthService {
         private jwtService: JwtService
     ) { }
 
-    async signUp(signUpDto: SignUpDto): Promise<{ success: boolean, role: Object, token: string }> {
+    async signUp(signUpDto: SignUpDto): Promise<{ success: boolean, role: Boolean, token: string }> {
         const { username, password, email, first_name, last_name, role } = signUpDto;
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -37,7 +36,7 @@ export class AuthService {
         return { success: true, role: user.role, token: token }
     }
 
-    async login(loginDto: LoginDto): Promise<{ token: string, success: boolean, type: Object, data: string }> {
+    async login(loginDto: LoginDto): Promise<{ token: string, success: boolean, type: Boolean, data: string }> {
         try {
             const { email, password } = loginDto;
             const user = await this.userModel.findOne({ email });
