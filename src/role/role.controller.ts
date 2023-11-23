@@ -11,8 +11,8 @@ export class RoleController {
     return this.roleService.findAll();
   }
 
-  @Get(':role')
-  async findOne(@Param('role') role: Boolean): Promise<Role> {
-    return this.roleService.findOne(role);
+  @Get(':id')
+  async findOne(@Param('id') id: string): Promise<Role> {
+    return this.roleService.findOne(id);
   }
 }

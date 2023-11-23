@@ -23,5 +23,5 @@ export class SignUpDto {
 
     @IsNotEmpty()
     @IsBoolean()
-    role: Boolean;
+    role: string;
 }

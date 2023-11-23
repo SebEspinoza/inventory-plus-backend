@@ -16,17 +16,12 @@ export class AuthService {
     constructor(
         @InjectModel(User.name)
         private userModel: Model<User>,
-        private jwtService: JwtService,
-        @InjectModel(Role.name)
-        private roleModel: Model<Role>
+        private jwtService: JwtService
     ) { }
 
-    async signUp(signUpDto: SignUpDto): Promise<{ success: boolean, role: any, token: string }> {
+    async signUp(signUpDto: SignUpDto): Promise<{ success: boolean, role: Object, token: string }> {
         const { username, password, email, first_name, last_name, role } = signUpDto;
         const hashedPassword = await bcrypt.hash(password, 10);
-        const roles = await this.roleModel.findOne({ role }).exec();
-
-        console.log(roles);
 
         const user = await this.userModel.create({
             username,
@@ -34,15 +29,15 @@ export class AuthService {
             email,
             first_name,
             last_name,
-            role: roles
+            role
         });
 
         const token = this.jwtService.sign({ id: user._id, username: user.username });
 
-        return { success: true, role, token: token }
+        return { success: true, role: user.role, token: token }
     }
 
-    async login(loginDto: LoginDto): Promise<{ token: string, success: boolean, type: Role, data: string }> {
+    async login(loginDto: LoginDto): Promise<{ token: string, success: boolean, type: Object, data: string }> {
         try {
             const { email, password } = loginDto;
             const user = await this.userModel.findOne({ email });
@@ -53,9 +48,8 @@ export class AuthService {
             if (!isPasswordMatch) {
                 throw new UnauthorizedException('Correo o Contraseña Incorrecta');
             }
-            const role = await this.roleModel.findById(user.role);
             const refresh_token = this.jwtService.sign({ id: user._id, username: user.username });
-            return { token: refresh_token, success: true, type: role, data: user.username };
+            return { token: refresh_token, success: true, type: user.role, data: user.username };
         } catch {
             throw new UnauthorizedException('Correo o Contraseña Incorrecta');
         }

@@ -3,12 +3,10 @@ import { Inject, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { User, UserDocument } from "../schemas/user.schema";
 import { encodePassword } from "src/utils/bcrypt";
-import { Role, RoleDocument } from "src/schemas/role.schema";
 
 @Injectable()
 export class UserService {
-    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>,
-        @InjectModel(Role.name) private roleModel: Model<RoleDocument>) { }
+    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { }
 
     async create(user: User): Promise<User> {
         const password = await encodePassword(user.password);
