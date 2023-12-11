@@ -39,22 +39,18 @@ export class AuthService {
             const user = await this.userModel.findOne({ email });
 
             if (!user) {
-                throw new NotFoundException('Usuario Invalido');
+                return { token: null, success: false, type: null, data: null };
             }
 
             const isPasswordMatch = await bcrypt.compare(password, user.password);
 
             if (!isPasswordMatch) {
-                throw new UnauthorizedException('Credenciales Invalidas');
+                return { token: null, success: false, type: null, data: null };
             }
-
             const refresh_token = this.jwtService.sign({ id: user._id, username: user.username });
             return { token: refresh_token, success: true, type: user.role, data: user.username };
         } catch (error) {
-            if (error instanceof UnauthorizedException || error instanceof NotFoundException) {
-                throw error;
-            }
-            throw new UnauthorizedException('Credenciales Invalidas');
+            return { token: null, success: false, type: null, data: null };
         }
     }
 }
