@@ -37,19 +37,24 @@ export class AuthService {
         try {
             const { email, password } = loginDto;
             const user = await this.userModel.findOne({ email });
+            const error = new UnauthorizedException('Credenciales Invalidas');
 
             if (!user) {
-                return { token: null, success: false, type: null, data: null };
+                throw error;
             }
 
             const isPasswordMatch = await bcrypt.compare(password, user.password);
 
             if (!isPasswordMatch) {
-                return { token: null, success: false, type: null, data: null };
+                throw error;
             }
             const refresh_token = this.jwtService.sign({ id: user._id, username: user.username });
             return { token: refresh_token, success: true, type: user.role, data: user.username };
         } catch (error) {
+            // Handle the error here, log it, or perform any necessary actions
+            console.error('Login error:', error.message);
+
+            // Instead of rethrowing, you might want to return a specific response
             return { token: null, success: false, type: null, data: null };
         }
     }
